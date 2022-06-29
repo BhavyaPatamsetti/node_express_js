@@ -1,34 +1,41 @@
-// Include ./utils/geoloc
-// Include ./utils/weatherinfo
+var createError = require('http-errors');
+var express = require('express');
+var path = require('path');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
 
-var geoloc = require('./utils/geoloc')
-var weatherinfo = require('./utils/weatherinfo')
+var indexRouter = require('./routes/index');
+var usersRouter = require('./routes/users');
 
-geoloc.geoloc("Bhimavaram",function(error,locjson){
-    if(error){
-        console.log(error)
-    }
-    else{
-        console.log("Bhimavaram Longitude:"+locjson.longitude+" Latitude:"+locjson.latitude)
-        
-    }
-})
+var app = express();
 
-weatherinfo.getWeatherInfo("Bhimavaram",function(error,temperatureinfo){
-            if(error){
-                console.log(error)
-            }
-            else{
-                console.log("Current Temperature in Bhimavaram:"+temperatureinfo)
-            }
-        
-        })
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-//Test the following Case and observe the output.
-// CASE 1:Copy and Paste the above code to test with another valid city and observe the output.
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 
-// CASE 2:Copy and Paste the above code to test with invalid city value and observe the output.
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
 
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
 
+module.exports = app;
