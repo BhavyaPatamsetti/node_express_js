@@ -1,5 +1,5 @@
 {
-  "name": "firstapplication",
+  "name": "project",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "chalk": "^4.1.2",
-    "cowsay": "^1.5.0"
+    "needle": "^3.1.0"
   }
 }
